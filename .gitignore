@@ -79,7 +79,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-
 ### Node template
 # Logs
 logs
@@ -150,17 +149,12 @@ typings/
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-
-
-
 
 ### Windows template
 # Windows thumbnail cache files
@@ -248,7 +242,6 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
-
 ### Vim template
 # Swap
 [._]*.s[a-v][a-z]
@@ -265,13 +258,11 @@ Session.vim
 # Auto-generated tag files
 tags
 
-
 ### Project template
 
 fare/media/
 
 .pytest_cache/
-
 
 .ipython/
 .env
