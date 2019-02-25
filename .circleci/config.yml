@@ -20,12 +20,12 @@ jobs:
       - run: sudo chown -R circleci:circleci /usr/local/share
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
       - restore_cache:
-          key: deps-{{ .Branch }}-{{ checksum "requirements/production.txt" }}
+          key: deps-{{ .Branch }}-{{ checksum "requirements/local.txt" }}
       - run:
           command: |
-            pip install -r requirements/production.txt
+            pip install -r requirements/local.txt
       - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "requirements/production.txt" }}
+          key: deps-{{ .Branch }}-{{ checksum "requirements/local.txt" }}
           paths:
             - ".venv"
             - "/usr/local/bin"
