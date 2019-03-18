@@ -5,7 +5,7 @@ rcssmin==1.0.6  # https://github.com/ndparker/rcssmin
 argon2-cffi==19.1.0  # https://github.com/hynek/argon2_cffi
 redis>=2.10.6,<4  # pyup: < 3 # https://github.com/antirez/redis
 celery==4.2.1  # pyup: < 5.0  # https://github.com/celery/celery
-flower==0.9.2  # https://github.com/mher/flower
+flower==0.9.3  # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
