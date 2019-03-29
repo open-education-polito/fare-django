@@ -2,8 +2,36 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
+from django.http import HttpResponseRedirect
 
 User = get_user_model()
+
+
+class ChangeStaffPermissionView(LoginRequiredMixin, UpdateView):
+    http_method_names = ['post', 'get']
+    model = User
+    slug_field = "username"
+    slug_url_kwarg = "username"
+    fields = ('staff_member',)
+    template_name_suffix = '_change_permission'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.staff_member:
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse("home"))
+
+    def post(self, request, *args, **kwargs):
+        if request.user.staff_member:
+            return super().post(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse("home"))
+
+    def get_success_url(self):
+        return reverse("users:list")
+
+
+change_permission_view = ChangeStaffPermissionView.as_view()
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
