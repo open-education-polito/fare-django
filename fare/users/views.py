@@ -16,13 +16,15 @@ class ChangeStaffPermissionView(LoginRequiredMixin, UpdateView):
     template_name_suffix = '_change_permission'
 
     def get(self, request, *args, **kwargs):
-        if request.user.staff_member:
+        # verify if the user is a staff member and the requested user is not an admin
+        if request.user.staff_member and not User.objects.get(username=kwargs['username']).is_superuser:
             return super().get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse("home"))
 
     def post(self, request, *args, **kwargs):
-        if request.user.staff_member:
+        # verify if the user is a staff member and the requested user is not an admin
+        if request.user.staff_member and not User.objects.get(username=kwargs['username']).is_superuser:
             return super().post(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse("home"))
