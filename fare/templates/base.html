@@ -1,3 +1,4 @@
+{% extends "bootstrap-italia-base.html" %} 
 {% load static i18n compress%}<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -33,6 +34,11 @@
   </head>
 
   <body>
+	
+	<!-- Container - Body of page rendered for agid template-->
+	<div class="main-body">
+		{% block container %}
+
 
     <div class="mb-1">
       <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -107,6 +113,13 @@
       {% endcompress %}
 
     {% endblock javascript %}
+	
+
+	<!-- Container - END Body of page rendered for agid template-->
+	{% endblock container %}
+	</div>
+
+
   </body>
 </html>
  
