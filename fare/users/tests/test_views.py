@@ -1,7 +1,7 @@
 import pytest
 from django.conf import settings
 from django.test import RequestFactory, Client, TestCase
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
@@ -43,7 +43,7 @@ class TestUserChangePermissions(TestCase):
 
         self.assertRedirects(response=response, expected_url='/', status_code=302, target_status_code=200)
 
-    def test_user_post_permission_page(self):
+    def test_user_post_permission(self):
         """
         A user without staff_member permission perform a POST to change another user's permission
         user (POST)--> user (permission)
@@ -72,7 +72,7 @@ class TestUserChangePermissions(TestCase):
         """
         A user with staff_member permission perform a GET to another user's permission page
         staff (GET)--> user (permission page)
-        """ 
+        """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
         password1 = 'test_password'
@@ -95,8 +95,7 @@ class TestUserChangePermissions(TestCase):
         self.assertTemplateUsed(response, 'users/user_change_permission.html')
         self.assertEqual(response.status_code, 200)
 
-    '''
-    def test_staff_post_permission_page(self):
+    def test_staff_post_permission(self):
         """
         A user with staff_member permission perform a POST to change another user's permission
         staff (POST)--> user (permission)
@@ -125,9 +124,38 @@ class TestUserChangePermissions(TestCase):
                                 follow=True
                             )
 
+        self.assertTemplateUsed(response, 'users/user_list.html')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(user2.staff_member, True)
-    '''
+        self.assertEqual(MyUser.objects.get(username=username2).staff_member, True)
+
+    def test_staff_post_staff_permission(self):
+        """
+        A user with staff_member permission perform a POST to change another staff's permission
+        staff (POST)--> staff (permission)
+        """
+        username1 = 'TestUser1'
+        email1 = 'testUser1@mail.com'
+        password1 = 'test_password'
+        username2 = 'TestUser2'
+        email2 = 'testUser2@mail.com'
+        password2 = 'test_password'
+
+        user1 = MyUser.objects.create_user(username=username1, email=email1, password=password1)
+        user1.staff_member = True
+        user1.save()
+
+        user2 = MyUser.objects.create_user(username=username2, email=email2, password=password2)
+        user2.staff_member = True
+        user2.save()
+
+        client = Client()
+        client.login(username=username1, password=password1)
+
+        response = client.post(reverse('users:staff_permission', kwargs={'username': username2}), follow=True)
+
+        self.assertTemplateUsed(response, 'users/user_list.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(MyUser.objects.get(username=username2).staff_member, False)
 
     def test_staff_get_admin_permission_page(self):
         """
@@ -156,6 +184,37 @@ class TestUserChangePermissions(TestCase):
 
         self.assertTemplateNotUsed(response, 'users/user_change_permission.html')
         self.assertEqual(response.status_code, 302)
+
+    def test_staff_post_admin_permission(self):
+        """
+        A user with staff_member permission perform a POST to change admin's permission
+        staff (POST)--> admin (permission)
+        """
+        username1 = 'TestUser1'
+        email1 = 'testUser1@mail.com'
+        password1 = 'test_password'
+        username2 = 'TestUser2'
+        email2 = 'testUser2@mail.com'
+        password2 = 'test_password'
+
+        user1 = MyUser.objects.create_user(username=username1, email=email1, password=password1)
+        user1.staff_member = True
+        user1.save()
+
+        user2 = MyUser.objects.create_user(username=username2, email=email2, password=password2)
+        user2.is_superuser = True
+        user2.staff_member = True
+        user2.save()
+
+        client = Client()
+        client.login(username=username1, password=password1)
+
+        response = client.post(reverse('users:staff_permission', kwargs={'username': username2}), follow=True)
+
+        self.assertTemplateNotUsed(response, 'users/user_change_permission.html')
+        self.assertTemplateUsed(response, 'pages/home.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(MyUser.objects.get(username=username2).staff_member, True)
 
 
 class TestUserUpdateView:
