@@ -33,3 +33,9 @@ jobs:
       - run:
           command: |
             python manage.py test
+      - run:
+          command: |
+            mypy
+      - run:
+          command: |
+            flake8 fare
