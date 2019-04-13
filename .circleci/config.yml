@@ -1,6 +1,8 @@
 version: 2
 jobs:
-  build:
+  # Build the system -> branches != master
+  # In this case, we are building and running the tests
+  test:
     working_directory: ~/fare
     docker:
       - image: circleci/python:3.6.4
@@ -22,8 +24,7 @@ jobs:
       - restore_cache:
           key: deps-{{ .Branch }}-{{ checksum "requirements/local.txt" }}
       - run:
-          command: |
-            pip install -r requirements/local.txt
+          command: pip install -r requirements/local.txt
       - save_cache:
           key: deps-{{ .Branch }}-{{ checksum "requirements/local.txt" }}
           paths:
@@ -31,11 +32,62 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.6/site-packages"
       - run:
-          command: |
-            python manage.py test
+          command: python manage.py test
       - run:
-          command: |
-            mypy
+          command: mypy fare
       - run:
-          command: |
-            flake8 fare
+          command: flake8 fare
+
+  # Build the system -> master branch
+  # In this case, we are building using the "production" envs
+  # TODO: ATM this is just for testing the install with the prod requirements
+  # The official one will require changing the envs to prod
+  build-prod:
+    working_directory: ~/fare
+    docker:
+      - image: circleci/python:3.6.4
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
+          CELERY_BROKER_URL: redis://redis:6379/0
+          USE_DOCKER: no
+      - image: circleci/postgres:9.6.2
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle_test
+      - image: redis
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/share
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
+      - restore_cache:
+          key: deps-{{ .Branch }}-{{ checksum "requirements/production.txt" }}
+      - run:
+          command: pip install -r requirements/production.txt
+      - save_cache:
+          key: deps-{{ .Branch }}-{{ checksum "requirements/production.txt" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
+
+# WORKFLOWS
+workflows:
+  version: 2
+  # Continuous Deploy: build master and prepare for deploying
+  continuous-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+  # Test only: test other branches
+  do-test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore:
+                - master
