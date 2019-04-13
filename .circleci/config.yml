@@ -42,7 +42,7 @@ jobs:
   # In this case, we are building using the "production" envs
   # TODO: ATM this is just for testing the install with the prod requirements
   # The official one will require changing the envs to prod
-  build-prod:
+  build:
     working_directory: ~/fare
     docker:
       - image: circleci/python:3.6.4
