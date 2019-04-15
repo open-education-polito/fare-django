@@ -19,9 +19,15 @@ class TestUserChangePermissions(TestCase):
 
     def test_user_get_permission_page(self):
         """
-        A user without staff_member permission perform a GET on another user's permission
-        page to change the staff_member permission and fail
-        user (GET)--> user (permission page)
+        Test purpose:
+        a user without staff_member permission can't perform a GET
+        to the change permission page of another user
+
+        Input:
+        two user without staff_member permission
+
+        Output:
+        redirect to home page with status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -45,8 +51,15 @@ class TestUserChangePermissions(TestCase):
 
     def test_user_post_permission(self):
         """
-        A user without staff_member permission perform a POST to change another user's permission
-        user (POST)--> user (permission)
+        Test purpose:
+        a user without staff_member permission can't perform a POST
+        to change permission of another user
+
+        Input:
+        two user without staff_member permission
+
+        Output:
+        redirect to home page with target status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -70,8 +83,16 @@ class TestUserChangePermissions(TestCase):
 
     def test_staff_get_permission_page(self):
         """
-        A user with staff_member permission perform a GET to another user's permission page
-        staff (GET)--> user (permission page)
+        Test purpose:
+        a user with staff_member permission can perform a GET
+        to the change permission page of another user
+
+        Input:
+        two user, one who perform a GET with staff_member permission
+        the other without it
+
+        Output:
+        GET change permission page of the requested user with status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -97,8 +118,17 @@ class TestUserChangePermissions(TestCase):
 
     def test_staff_post_permission(self):
         """
-        A user with staff_member permission perform a POST to change another user's permission
-        staff (POST)--> user (permission)
+        Test purpose:
+        a user with staff_member permission can perform a POST
+        to change permission of another user
+
+        Input:
+        two user, one who perform a POST with staff_member permission
+        the other without it
+
+        Output:
+        change permission of the requested user and redirection
+        to the list of all useres with status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -130,8 +160,16 @@ class TestUserChangePermissions(TestCase):
 
     def test_staff_post_staff_permission(self):
         """
-        A user with staff_member permission perform a POST to change another staff's permission
-        staff (POST)--> staff (permission)
+        Test purpose:
+        a user with staff_member permission can perform a POST
+        to change permission of another user with the same permission
+
+        Input:
+        two user with staff_member permission
+
+        Output:
+        change permission of the requested user and redirection
+        to the list of all useres with status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -159,8 +197,16 @@ class TestUserChangePermissions(TestCase):
 
     def test_staff_get_admin_permission_page(self):
         """
-        A user with staff_member permission perform a GET to an admin's permission page
-        staff (GET)--> admin (permission page)
+        Test purpose:
+        a user with staff_member permission can't perform a GET
+        to the change permission page of an admin user
+
+        Input:
+        two user, one who perform a GET with staff_member permission
+        and the target one with is_superuser permission
+
+        Output:
+        redirect to home page with status code 302
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
@@ -187,8 +233,16 @@ class TestUserChangePermissions(TestCase):
 
     def test_staff_post_admin_permission(self):
         """
-        A user with staff_member permission perform a POST to change admin's permission
-        staff (POST)--> admin (permission)
+        Test purpose:
+        a user with staff_member permission can't perform a POST
+        to change permission of an admin user
+
+        Input:
+        two user, one who perform a POST with staff_member permission
+        and the target one with is_superuser permission
+
+        Output:
+        redirect to home page with status code 200
         """
         username1 = 'TestUser1'
         email1 = 'testUser1@mail.com'
