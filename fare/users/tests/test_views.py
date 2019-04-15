@@ -148,11 +148,7 @@ class TestUserChangePermissions(TestCase):
         client = Client()
         client.login(username=username1, password=password1)
 
-        response = client.post(
-                                reverse('users:staff_permission', kwargs={'username': username2}),
-                                data,
-                                follow=True
-                            )
+        response = client.post(reverse('users:staff_permission', kwargs={'username': username2}), data, follow=True)
 
         self.assertTemplateUsed(response, 'users/user_list.html')
         self.assertEqual(response.status_code, 200)
