@@ -35,7 +35,7 @@ class ChangeStaffPermissionView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         """
         Manage the GET request, if the user has the permission and the requested user is not an admin,
-        display the page where the he can modify the requested user's permission 
+        display the page where the he can modify the requested user's permission
         """
         # verify if the user is a staff member and the requested user is not an admin
         if request.user.staff_member and not User.objects.get(username=kwargs['username']).is_superuser:
@@ -45,7 +45,7 @@ class ChangeStaffPermissionView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         """
-        Manage the POST request, check the permission and if the user has it, 
+        Manage the POST request, check the permission and if the user has it,
         change the field of the requested user unless he is an admin
         """
         # verify if the user is a staff member and the requested user is not an admin
