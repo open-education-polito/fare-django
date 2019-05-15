@@ -7,3 +7,4 @@ class Document(models.Model):
     description = models.CharField(max_length=255)
     school_level = models.CharField(max_length=255)
     school_subject = models.CharField(max_length=255)
+    document = models.FileField(upload_to='documents/')
