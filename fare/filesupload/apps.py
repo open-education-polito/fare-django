@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class FilesuploadConfig(AppConfig):
-    name = 'Filesupload'
+    name = 'fare.filesupload'
+    verbose_name = 'Filesupload'
