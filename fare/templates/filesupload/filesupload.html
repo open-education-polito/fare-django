@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Upload file{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<h2>Upload</h2>
+	
+	<form class="form-horizontal" method="post" action="{% url 'filesupload:files_upload' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn">Upload</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+{% endblock content %}
+
