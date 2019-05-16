@@ -21,6 +21,11 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    # File upload managment
+    path(
+        "filesupload/",
+        include("fare.filesupload.urls", namespace="filesupload"),
+    ),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
