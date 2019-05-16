@@ -4,7 +4,7 @@ from .forms import DocumentForm
 from django.views.generic.edit import FormView
 
 
-class FileFieldView(FormView):
+class FilesUploadView(FormView):
     form_class = DocumentForm
     template_name = 'filesupload.html'
     success_url = 'home'
@@ -16,3 +16,6 @@ class FileFieldView(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+files_upload_view = FilesUploadView.as_view()
